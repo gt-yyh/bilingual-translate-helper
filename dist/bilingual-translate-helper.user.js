@@ -3,10 +3,12 @@
 // @name:en      Bilingual Translate Helper - AI Web & Video Subtitle Translator
 // @description  网页与视频字幕（YouTube、X/Twitter）的 AI 双语翻译工具：DeepSeek / OpenAI 兼容接口、双语或仅译文、输入框三连空格翻译、悬浮球控制面板
 // @description:en  AI bilingual translation for web pages and video subtitles (YouTube, X/Twitter): DeepSeek / OpenAI-compatible APIs, dual or translation-only modes, triple-space input translation, floating ball panel.
-// @version     1.1.0
+// @version     1.1.1
 // @namespace    https://bilingual-translate-helper.local
 // @author       Bilingual Translate Helper
 // @license      MIT
+// @icon        https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/assets/icon-128.png
+// @icon64      https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/assets/icon-128.png
 // @updateURL   https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/dist/bilingual-translate-helper.user.js
 // @downloadURL https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/dist/bilingual-translate-helper.user.js
 // @match        *://*/*
