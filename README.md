@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/assets/icon-512.png" width="112" height="112" alt="双语翻译助手图标">
+</p>
+
+<h1 align="center">双语翻译助手</h1>
+
+<p align="center">AI 网页与视频字幕双语翻译 · 使用你自己的 API Key</p>
+
 ## 脚本简介
 
 **双语翻译助手 - AI 网页与视频字幕双语翻译** 是一款运行在用户脚本管理器中的 AI 翻译工具。它调用你自己配置的 DeepSeek 或 OpenAI 兼容接口，为网页正文、YouTube/HTML5 视频字幕、输入框文本和选中文本提供双语或仅译文显示。API Key 只保存在本地，脚本不接入遥测或统计服务。
@@ -13,6 +21,26 @@
 - 输入框三连空格翻译、划词工具栏、悬浮球控制面板。
 
 - 使用 DeepSeek 官方接口或任意 OpenAI 兼容接口，密钥由你自己管理。
+
+### 界面截图
+
+#### 网页双语翻译
+
+段落级双语对照，原文完整保留，静态链接和按钮依然可以点击；悬浮球贴边收起，随时唤起。
+
+![网页双语翻译与悬浮球](https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/assets/shot-article.png)
+
+#### 悬浮球控制面板
+
+在一个面板内切换目标语言和翻译服务、开关 AI 上下文与“仅译文”，并进入视频字幕、输入框翻译和更多设置。
+
+![悬浮球控制面板](https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/assets/shot-popup.png)
+
+#### 设置与服务
+
+填入 API Key 后点击“测试服务”即可验证密钥、接口地址和模型是否可用；设置面板支持深色主题。
+
+![设置与服务](https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/assets/shot-settings.png)
 
 ### 网页翻译
 
