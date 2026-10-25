@@ -143,7 +143,7 @@
 ### 安装与配置
 
 1. 安装 Tampermonkey、Violentmonkey 或其他支持 `GM_*` API 的用户脚本管理器。
-2. 安装本脚本。
+2. [安装本脚本](https://raw.githubusercontent.com/gt-yyh/bilingual-translate-helper/main/dist/bilingual-translate-helper.user.js)（在用户脚本管理器中打开该链接即可弹出安装页）。
 3. 首次运行会自动打开设置；在 DeepSeek 控制台创建 API Key 并填入。
 4. 如果使用自定义服务，填写接口地址、模型名称，必要时填写自定义请求头 JSON。
 5. 点击“测试服务”，确认返回译文后即可使用。
