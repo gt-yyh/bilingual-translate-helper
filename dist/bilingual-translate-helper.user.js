@@ -3,7 +3,7 @@
 // @name:en      Bilingual Translate Helper - AI Web & Video Subtitle Translator
 // @description  网页与视频字幕（YouTube、X/Twitter）的 AI 双语翻译工具：DeepSeek / OpenAI 兼容接口、双语或仅译文、输入框三连空格翻译、悬浮球控制面板
 // @description:en  AI bilingual translation for web pages and video subtitles (YouTube, X/Twitter): DeepSeek / OpenAI-compatible APIs, dual or translation-only modes, triple-space input translation, floating ball panel.
-// @version     1.1.1
+// @version 1.1.2
 // @namespace    https://bilingual-translate-helper.local
 // @author       Bilingual Translate Helper
 // @license      MIT
@@ -5572,7 +5572,9 @@ var BTT_SKIP_CLOSEST = [
   '.katex', '.MathJax', '.MathJax_Display', '.mwe-math-element', '.ltx_Math',
   '.prism-code', '.enlighter-code', '.rc-CodeBlock', '[role="code"]',
   '.codeBlockContent', '.codeBlockLines', '.token-line', '.monaco-editor',
-  '.cm-editor', '.CodeMirror', '.ace_editor', 'time', '.visuallyhidden'
+  '.cm-editor', '.CodeMirror', '.ace_editor', 'time', '.visuallyhidden',
+  '[class*="VisuallyHidden"]', '[class*="visually-hidden"]', '[class*="sr-only"]',
+  '[data-component="CounterLabel"]'
 ].join(',');
 
 var BTT_EXCLUDE_SUBTREE = [
@@ -5586,7 +5588,9 @@ var BTT_EXCLUDE_SUBTREE = [
   '[data-bt-skip]', '[data-bt-translation-element-mark="1"]',
   'script', 'style', 'noscript', 'svg', 'math', 'canvas', 'video', 'audio',
   'iframe', 'pre', 'code', 'kbd', 'samp', 'var', 'textarea', 'select',
-  '.katex', '.MathJax', '.mwe-math-element', '.ltx_Math'
+  '.katex', '.MathJax', '.mwe-math-element', '.ltx_Math',
+  '[class*="VisuallyHidden"]', '[class*="visually-hidden"]', '[class*="sr-only"]',
+  '[data-component="CounterLabel"]'
 ].join(',');
 
 var BTT_SKIP_TEXT_RE = /^(?:\d+[.,]?\d*\s*(?:min|mins|minute|minutes|h|hr|hrs|hour|hours|s|sec|secs|second|seconds|d|day|days|w|week|weeks|mo|month|months|y|yr|year|years)\s+ago|just now|刚刚|\d+\s*分钟前|\d+\s*小时前|\d+\s*天前|\d+\s*周前|\d+\s*个月前|\d+\s*年前)$/i;
@@ -6007,6 +6011,10 @@ PageTranslator.prototype._collectTextNodes = function (el, skipNodes) {
       if (child.tagName === 'A') continue;
       if (BTT_SKIP_TAGS[child.tagName]) continue;
       if (self._isExcludedElement(child)) continue;
+      /* A leaf element that only carries digits or punctuation (a badge, a
+       * counter, the "1" in "1 Branch") is metadata, not a label. Leaving it
+       * out keeps numbers from being duplicated in the translation. */
+      if (!child.children.length && !/[\p{L}\p{M}]/u.test(child.textContent || '')) continue;
       var display = '';
       try { display = getComputedStyle(child).display; } catch (e) {}
       if (display === 'none') continue;
@@ -6073,7 +6081,11 @@ PageTranslator.prototype._shouldTranslateText = function (text, el) {
   if (detected !== 'unknown' && never.indexOf(detected) >= 0) return false;
   try {
     var style = getComputedStyle(el);
-    if (style.webkitUserSelect === 'none' && style.userSelect === 'none' && text.length < 12) return false;
+    /* Player chrome and icon-only controls mark their labels as unselectable.
+     * Skip them only when no real word is present ("1080p", "1x"); buttons and
+     * links such as Star, Fork, Branch or Tags are UI text the user reads. */
+    if (style.webkitUserSelect === 'none' && style.userSelect === 'none' &&
+        text.length < 12 && !/[\p{L}]{3,}/u.test(text)) return false;
   } catch (e) {}
   return true;
 };
@@ -6155,7 +6167,14 @@ PageTranslator.prototype._addLinkRecords = function (found, roots) {
       if (!/[\p{L}\p{M}]/u.test(outside)) {
         var allLinks = [];
         try { allLinks = container.querySelectorAll('a'); } catch (eAllLinks) {}
-        if (allLinks.length !== 1) continue;
+        /* A cluster of links without a single readable label is an icon bar and
+         * must stay untouched. A button row such as GitHub's Branch/Tags pair
+         * carries real labels and is worth translating. */
+        var labelledLinks = 0;
+        for (var ll = 0; ll < allLinks.length; ll++) {
+          if (/[\p{L}\p{M}]/u.test(normalizeWhitespace(allLinks[ll].textContent || ''))) labelledLinks++;
+        }
+        if (!labelledLinks) continue;
       }
     }
     // Metadata rows (points / byline / hide / comments) have many links and
